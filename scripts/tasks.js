@@ -174,4 +174,21 @@ window.addEventListener('load', function() {
     console.log("----- Задача 8 ----- \n\n");
     console.log(pluck(characters, 'name')); // ['barney', 'fred']
     console.log("\n");
+
+    // ЗАДАЧА 9
+    function filter(arr, func) {
+        var newArr = [];
+        for (var i = 0; i < arr.length; i++) {
+            if (func(arr[i])) {
+                newArr.push(arr[i]);
+            }
+        }
+        return newArr;
+    }
+    var input = [1, 2, 3, 4, 5, 6];
+    function isEven(x) { return x % 2 == 0; } // проверяет на четность
+
+    console.log("----- Задача 9 ----- \n\n");
+    console.log(filter(input, isEven)); // [2, 4, 6]
+    console.log("\n");
 });
