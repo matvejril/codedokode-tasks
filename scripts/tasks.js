@@ -58,13 +58,13 @@ window.addEventListener('load', function() {
     console.log("\n");
 
     // ЗАДАЧА 4
-    function fmap(a, b) {
+    function fmap(a, gen) {
         return function() {
             var args = [];
             for (var j = 0; j < arguments.length; j++) {
                 args.push(arguments[j]);
             }
-            return a(b.apply(null, args));
+            return a(gen.apply(null, args));
         }
     }
     function square(x) {
@@ -82,6 +82,42 @@ window.addEventListener('load', function() {
     console.log("\n");
 
     // ЗАДАЧА 5
+    function partial(func) {
+        var argsPart = [];
+        for (var e = 1; e < arguments.length; e++) {
+            argsPart.push(arguments[e]);
+        }
+        return function() {
+            var argsFn = [];
+            for (var e = 0; e < arguments.length; e++) {
+                argsFn.push(arguments[e]);
+            }
+            return func.apply(null, (argsPart.concat(argsFn)))
+        }
+    }
+    function add(a, b) {
+        return a + b;
+    }
+    function mult(a, b, c, d) {
+        return a * b * c * d;
+    }
+    var add5 = partial(add, 5); // Мы получили функцию с 1 аргументом, которая прибавляет к любому числу 5
+
+    // result
+    console.log("----- Задача 5 add5 ----- \n\n");
+    console.log(add5(2)); // 7
+    console.log(add5(10)); // 15
+    console.log(add5(8)); // 13
+    console.log("\n");
+
+    var mult23 = partial(mult, 2, 3); // мы зафиксировали первые 2 аргумента mult() как 2 и 3
+
+    // result
+    console.log("----- Задача 5 mult ----- \n\n");
+    console.log(mult23(4, 5)); // 2*3*4*5 = 120
+    console.log(mult23(1, 1)); // 2*3*1*1 = 6
+    console.log("\n");
+
 
     // ЗАДАЧА 6
 
