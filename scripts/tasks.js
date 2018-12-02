@@ -149,10 +149,29 @@ window.addEventListener('load', function() {
     var test1_3 = partialAny(test, 1, undefined, 3);
 
     // result
-    console.log("----- Задача 6 mult ----- \n\n");
+    console.log("----- Задача 6  ----- \n\n");
     console.log(test1_3(5, 6, 4)); // a=1,b=5,c=3
     console.log("\n");
 
 
     // ЗАДАЧА 7
+
+
+    // ЗАДАЧА 8
+    function pluck(arr, prop) {
+        var newArr = [];
+        for (var i = 0; i < arr.length; i++) {
+            newArr.push(arr[i][prop]);
+        }
+        return newArr;
+    }
+    var characters = [
+        { 'name': 'barney', 'age': 36 },
+        { 'name': 'fred', 'age': 40 }
+    ];
+
+    // result
+    console.log("----- Задача 8 ----- \n\n");
+    console.log(pluck(characters, 'name')); // ['barney', 'fred']
+    console.log("\n");
 });
