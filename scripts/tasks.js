@@ -118,8 +118,41 @@ window.addEventListener('load', function() {
     console.log(mult23(1, 1)); // 2*3*1*1 = 6
     console.log("\n");
 
-
     // ЗАДАЧА 6
+    function partialAny(func) {
+        var argsPart = [];
+        for (var e = 1; e < arguments.length; e++) {
+            argsPart.push(arguments[e]);
+        }
+        return function() {
+            var argsFn = [];
+            var newArr = [];
+
+            for (var e = 0; e < arguments.length; e++) {
+                argsFn.push(arguments[e]);
+            }
+            for (var i = 0; i < argsPart.length; i++) {
+                if (argsPart[i] === undefined){
+                    newArr.push(argsFn[0]);
+                    argsFn.splice(0, 1);
+                } else {
+                    newArr.push(argsPart[i]);
+                }
+            }
+            return func.apply(null, newArr.concat(argsFn))
+        }
+    }
+    function test(a, b, c) {
+        return 'a=' + a + ',b=' + b + ',c=' + c;
+    }
+
+    var test1_3 = partialAny(test, 1, undefined, 3);
+
+    // result
+    console.log("----- Задача 6 mult ----- \n\n");
+    console.log(test1_3(5, 6, 4)); // a=1,b=5,c=3
+    console.log("\n");
+
 
     // ЗАДАЧА 7
 });
