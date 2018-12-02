@@ -153,7 +153,6 @@ window.addEventListener('load', function() {
     console.log(test1_3(5, 6, 4)); // a=1,b=5,c=3
     console.log("\n");
 
-
     // ЗАДАЧА 7
 
 
@@ -188,7 +187,30 @@ window.addEventListener('load', function() {
     var input = [1, 2, 3, 4, 5, 6];
     function isEven(x) { return x % 2 == 0; } // проверяет на четность
 
+    // result
     console.log("----- Задача 9 ----- \n\n");
     console.log(filter(input, isEven)); // [2, 4, 6]
+    console.log("\n");
+
+    // ЗАДАЧА 10
+    function count (obj) {
+        var len = 0;
+        for (var key in obj) {
+            len++;
+        }
+        return len;
+    }
+    var a = { a: 1, b: 2 };
+    var b = function () { };
+    var c = [1, 2, 3];
+    var d = [];
+    d[100] = 1;
+
+    // result
+    console.log("----- Задача 10 ----- \n\n");
+    console.log(count(a)); // 2
+    console.log(count(b)); // 0
+    console.log(count(c)); // 3
+    console.log(count(d)); // 1
     console.log("\n");
 });
