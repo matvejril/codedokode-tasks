@@ -268,7 +268,264 @@ window.addEventListener('load', function() {
     }
 
     // result
-    console.log("----- Задача 10 ----- \n\n");
+    console.log("----- Задача 11 ----- \n\n");
     console.log(flexSort(cities, "population", "asc", "5"));
+    console.log("\n");
+
+    // ЗАДАЧА 12
+    // var orderHamburger = {
+    //     SIZE_SMALL: "SIZE_SMALL",
+    //     SIZE_LARGE: "SIZE_LARGE",
+    //     STUFFING_CHEESE: "STUFFING_CHEESE",
+    //     STUFFING_SALAD: "STUFFING_SALAD",
+    //     STUFFING_POTATO: "STUFFING_POTATO",
+    //     TOPPING_MAYO: "TOPPING_MAYO",
+    //     TOPPING_SPICE: "TOPPING_SPICE"
+    // };
+    var orderHamburger = {
+        SIZE_SMALL: {param: "SIZE_SMALL", price: 50, calorie: 20},
+        SIZE_LARGE: {param: "SIZE_LARGE", price: 100, calorie: 40},
+        STUFFING_CHEESE: {param: "STUFFING_CHEESE", price: 10, calorie: 20},
+        STUFFING_SALAD: {param: "STUFFING_SALAD", price: 20, calorie: 5},
+        STUFFING_POTATO: {param: "STUFFING_POTATO", price: 15, calorie: 5},
+        TOPPING_MAYO: {param: "TOPPING_MAYO", price: 20, calorie: 5},
+        TOPPING_SPICE: {param: "TOPPING_SPICE", price: 15, calorie: 0}
+    };
+    function Hamburger (size, stuffing) {
+        if (!!size.param && !!stuffing.param) {
+            this.init(size, stuffing);
+        } else {
+            console.log("Ошибка инициализации");
+        }
+    }
+    Hamburger.prototype.init = function(size, stuffing) {
+        this.params = {
+            size: size,
+            stuffing: stuffing,
+            topping: []
+        };
+    };
+    // Добавить добавку
+    Hamburger.prototype.addTopping = function(topping) {
+        var thisTopping = this.params.topping;
+        var isPresent = 0;
+        for (var i = 0; i < thisTopping.length; i++) {
+            if (thisTopping[i].param === topping.param) {
+                isPresent++;
+            }
+        }
+        if (!isPresent) {
+            thisTopping.push(topping);
+        } else {
+            console.log("Такая добавка уже есть")
+        }
+    };
+    // Убрать добавку
+    Hamburger.prototype.removeTopping = function(topping) {
+        var thisTopping = this.params.topping;
+
+        for (var i = 0; i < thisTopping.length; i++) {
+            if (thisTopping[i].param === topping.param) {
+                delete thisTopping[i];
+            }
+        }
+    };
+    // Получить список добавок arr
+    Hamburger.prototype.getToppings = function() {
+        return this.params.topping;
+    };
+    // Узнать размер
+    Hamburger.prototype.getSize = function() {
+        return this.params.size.param;
+    };
+    // Узнать начинку
+    Hamburger.prototype.getStuffing = function() {
+        return this.params.stuffing.param;
+    };
+    // Узнать цену гамбургера
+    Hamburger.prototype.calculatePrice = function() {
+        var thisParams = this.params;
+        var totalPrice;
+        var mainPrice = thisParams.size.price;
+        var stuffPrice = thisParams.stuffing.price;
+        var toppingPrice = 0;
+        for (var i = 0; i < thisParams.topping.length; i++) {
+            toppingPrice += thisParams.topping[i].price;
+        }
+        totalPrice = mainPrice + stuffPrice + toppingPrice;
+
+        return totalPrice
+    };
+    // Узнать калорийность
+    Hamburger.prototype.calculateCalories = function() {
+        var thisParams = this.params;
+        var totalCalories;
+        var mainPrice = thisParams.size.calorie;
+        var stuffPrice = thisParams.stuffing.calorie;
+        var toppingPrice = 0;
+        for (var i = 0; i < thisParams.topping.length; i++) {
+            toppingPrice += thisParams.topping[i].calorie;
+        }
+        totalCalories = mainPrice + stuffPrice + toppingPrice;
+
+        return totalCalories
+    };
+
+    var hamburger1 = new Hamburger(orderHamburger.SIZE_SMALL, orderHamburger.STUFFING_CHEESE);
+
+    // result
+    // console.log("----- Задача 12 ----- \n\n");
+    // console.log("Размер", hamburger1.getSize());
+    // console.log("Начинка", hamburger1.getStuffing());
+    // console.log("calculatePrice", hamburger1.calculatePrice());
+    // console.log("calculateCalories", hamburger1.calculateCalories());
+    //
+    // console.log(hamburger1.getToppings());
+    // hamburger1.addTopping(orderHamburger.TOPPING_MAYO);
+    // console.log(hamburger1.getToppings());
+    // hamburger1.addTopping(orderHamburger.TOPPING_SPICE);
+    // console.log("getToppings", hamburger1.getToppings());
+    // console.log("removeTopping", hamburger1.removeTopping(orderHamburger.TOPPING_MAYO));
+    // console.log("getToppings", hamburger1.getToppings());
+    console.log("\n");
+
+    // ЗАДАЧА 13
+    var connectedObj = [
+        {
+            type: "powerPlants",
+            count: 1,
+            produceD: 20,
+            produceN: 20,
+            consumptionD: 0,
+            consumptionN: 0
+        }, {
+            type: "powerPlants",
+            count: 2,
+            produceD: 30,
+            produceN: 30,
+            consumptionD: 0,
+            consumptionN: 0
+        }, {
+            type: "powerPlants",
+            count: 2,
+            produceD: 50,
+            produceN: 50,
+            consumptionD: 0,
+            consumptionN: 0
+        }, {
+            type: "house",
+            count: 1,
+            produceD: 0,
+            produceN: 0,
+            consumptionD: 200*4/1000,
+            consumptionN: 200/1000,
+            apartments: 200
+        }, {
+            type: "house",
+            count: 1,
+            produceD: 0,
+            produceN: 0,
+            consumptionD: 120*4/1000,
+            consumptionN: 120/1000,
+            apartments: 120
+        },
+        {
+            type: "solarPanels",
+            count: 2,
+            produceD: 3,
+            produceN: 0,
+            consumptionD: 0,
+            consumptionN: 0
+        },
+        {
+            type: "solarPanels",
+            count: 1,
+            produceD: 5,
+            produceN: 0,
+            consumptionD: 0,
+            consumptionN: 0
+        },
+        {
+            type: "solarPanels",
+            count: 5,
+            produceD: 4,
+            produceN: 0,
+            consumptionD: 0,
+            consumptionN: 0
+        }
+    ];
+    var powerLines = [
+        {
+            count: 1,
+            price: 2,
+            power: 100
+        },
+        {
+            count: 2,
+            price: 3,
+            power: 200
+        }
+    ];
+    function ElectricGrid(connectedObj, powerLines) {
+        this.connectedObj = connectedObj;
+        this.powerLines = powerLines;
+    }
+    ElectricGrid.prototype.getInnerBalance = function() {
+        var innerBalance = 0;
+        for (var i = 0; i < this.connectedObj.length; i++) {
+            var objElem = this.connectedObj[i];
+            innerBalance += +(objElem.count * (objElem.produceD + objElem.produceN  - (objElem.consumptionD + objElem.consumptionN)))
+        }
+        return innerBalance;
+    };
+    ElectricGrid.prototype.getCashFlow = function() {
+        var innerBalance = 0;
+        var cashFlow = 0;
+        var lineCapacity = 0;
+
+        // Получить внетренний балан энергии
+        for (var i = 0; i < this.connectedObj.length; i++) {
+            var objElem = this.connectedObj[i];
+            innerBalance += +(objElem.count * (objElem.produceD + objElem.produceN  - (objElem.consumptionD + objElem.consumptionN)))
+        }
+
+        // Сортировать линии по цене
+        var powerLinesArr = this.powerLines.slice();
+        powerLinesArr.sort(function (lineA, lineB) {
+            if (lineA.price < lineB.price) {
+                return 1;
+            } else if (lineA.price > lineB.price) {
+                return -1;
+            }
+        });
+
+        // Найти денежный поток + -
+        for (var e = 0; e < powerLinesArr.length; e++) {
+            var powerLine = powerLinesArr[e];
+            lineCapacity += powerLine.count * powerLine.power;
+            cashFlow += innerBalance * powerLine.price;
+            if (lineCapacity >= Math.abs(innerBalance)) {
+                break
+            }
+        }
+
+        // if (innerBalance > 0) {
+        //     // for (var e = 0; e < powerLinesArr.length; e++) {
+        //     //
+        //     // }
+        // } else {
+        //
+        // }
+
+        return cashFlow;
+
+    };
+
+    var cityN = new ElectricGrid(connectedObj ,powerLines);
+
+// result
+    console.log("----- Задача 13 ----- \n\n");
+    console.log("Энергетический баланс города: ", cityN.getInnerBalance(), "МВт");
+    console.log("Денежный поток: ", cityN.getCashFlow(), "у.е");
     console.log("\n");
 });
