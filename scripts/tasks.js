@@ -149,12 +149,34 @@ window.addEventListener('load', function() {
     var test1_3 = partialAny(test, 1, undefined, 3);
 
     // result
-    console.log("----- Задача 6  ----- \n\n");
+    console.log("----- Задача 6 ----- \n\n");
     console.log(test1_3(5, 6, 4)); // a=1,b=5,c=3
     console.log("\n");
 
     // ЗАДАЧА 7
+    function bind(fn, context) {
+        return function() {
+            var newArg = [];
+            for (var i = 0; i < arguments.length; i++) {
+                newArg.push(arguments[i]);
+            }
+            return fn.apply(context, newArg);
+        }
+    }
+    window.x = 1;
+    var ctx = {
+        x: 2
+    };
+    function testThis(a) {
+        console.log("x=" + this.x + ", a=" + a);
+    }
 
+    // result
+    console.log("----- Задача 7 ----- \n\n");
+    testThis(100); // x=1, a=100
+    var boundFunction = bind(testThis, ctx);
+    boundFunction(100); // x=2, a=100
+    console.log("\n");
 
     // ЗАДАЧА 8
     function pluck(arr, prop) {
