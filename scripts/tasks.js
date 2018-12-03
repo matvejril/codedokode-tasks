@@ -235,4 +235,40 @@ window.addEventListener('load', function() {
     console.log(count(c)); // 3
     console.log(count(d)); // 1
     console.log("\n");
+
+    // ЗАДАЧА 11
+    var cities = [
+        {country: "Республика Корея", city: "Сеул-Инчхон", population: 24210},
+        {country: "Индия", city: "Мумбаи", population: 23265},
+        {country: "Индонезия", city: "Джакарта", population: 32275},
+        {country: "Япония", city: "Токио-Иокогама", population: 38050},
+        {country: "Индия", city: "Дели", population: 27280},
+        {country: "КНР", city: "Шанхай", population: 24115},
+        {country: "Филиппины", city: "Манила", population: 24650}
+    ];
+
+    // arr - исходный массив
+    // param - параметр сортировки
+    // order - "asc"/"desc" (возрастание/ убывание)
+    // len - колличесто выводимых элеменов
+    function flexSort(arr, param, order, len) {
+        arr.sort(sortByParam(param, order));
+        return arr.slice(0, len);
+    }
+    function sortByParam(param, order) {
+        return function (cityA, cityB) {
+            var comparison = 0;
+            if (cityA[param] < cityB[param]) {
+                comparison = 1;
+            } else if (cityA[param] > cityB[param]) {
+                comparison = -1;
+            }
+            return (order == 'desc') ? (comparison * -1) : comparison
+        }
+    }
+
+    // result
+    console.log("----- Задача 10 ----- \n\n");
+    console.log(flexSort(cities, "population", "asc", "5"));
+    console.log("\n");
 });
