@@ -523,9 +523,45 @@ window.addEventListener('load', function() {
 
     var cityN = new ElectricGrid(connectedObj ,powerLines);
 
-// result
+    // result
     console.log("----- Задача 13 ----- \n\n");
     console.log("Энергетический баланс города: ", cityN.getInnerBalance(), "МВт");
     console.log("Денежный поток: ", cityN.getCashFlow(), "у.е");
+    console.log("\n");
+
+    // ЗАДАЧА 14
+    function checkType(type){
+        switch (true) {
+            case (arguments.length <= 0): {
+                return "Ничего";
+            }
+            case (type === null): {
+                return "null";
+            }
+            case (Object.prototype.toString.call(type).indexOf("Array") > 0):{
+                return "array";
+            }
+            case ((typeof type) === "object" ? type.hasOwnProperty("length") : false): {
+                return "array-like"
+            }
+            default: {
+                return typeof type;
+            }
+        }
+    }
+
+    // result
+    console.log("----- Задача 14 ----- \n\n");
+    console.log("Ничего:", checkType());
+    console.log("undefined:", checkType(undefined));
+    console.log("boolean:", checkType(true));
+    console.log("number:", checkType(33));
+    console.log("string:", checkType("33"));
+    console.log("function:", checkType(function(){}));
+    console.log("null:", checkType(null));
+    console.log("array:", checkType([]));
+    console.log("object:", checkType({}));
+    console.log("array-like:", checkType({length: 2, 0: "0", 1: "1"}));
+
     console.log("\n");
 });
