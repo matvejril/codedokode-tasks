@@ -538,7 +538,7 @@ window.addEventListener('load', function() {
             case (type === null): {
                 return "null";
             }
-            case (Object.prototype.toString.call(type).indexOf("Array") > 0):{
+            case (Object.prototype.toString.call(type) === "[object Array]"):{
                 return "array";
             }
             case ((typeof type) === "object" ? type.hasOwnProperty("length") : false): {
@@ -562,6 +562,171 @@ window.addEventListener('load', function() {
     console.log("array:", checkType([]));
     console.log("object:", checkType({}));
     console.log("array-like:", checkType({length: 2, 0: "0", 1: "1"}));
+    console.log("\n");
 
+    // ЗАДАЧА 15 (Неглубокое копирование объектов/массивов)
+    function shallowCopy(obj) {
+        // Обработка строк, чисел, булей, null или undefined
+        if ( obj == null || typeof obj != "object") {
+            return obj;
+        }
+        var newObj = {};
+        // Обработка объекта даты
+        if (Object.prototype.toString.call(obj) === '[object Date]') {
+            newObj = new Date();
+            newObj.setTime(obj.getTime());
+            return newObj;
+        }
+        // Обработка остальных объектов
+        if (Object.prototype.toString.call(obj) === "[object Object]") {
+            newObj = Object.assign({}, obj);
+            return newObj
+        }
+        // Обработка массивов
+        if (Object.prototype.toString.call(obj) === "[object Array]") {
+            newObj = obj.slice();
+            return newObj
+        }
+        return newObj
+    }
+
+    // mocks
+    var shallowCopyObj = {
+        name: "Matvey",
+        age: "24",
+        cities: {
+            0: "Moscow",
+            1: "St.Petersburg",
+            2: "Novosibirsk"
+        },
+        date: new Date(2014, 1, 1, 12, 0, 0),
+        und: undefined,
+        ul: null,
+        arr: ["1", "2", [1, "sad"]]
+    };
+    var shallowCopyDate = new Date();
+    var shallowCopyArr = ["el0", "el1", "el2", new Date(), ["el30", "el31", new Date()], undefined, null];
+
+    // result
+    console.log("----- Задача 15 ----- \n\n");
+    var shallowCopyObj1 = shallowCopy(shallowCopyObj);
+    shallowCopyObj1.age = "25";
+    shallowCopyObj1.arr[0] = "25";
+    console.log("shallowCopyObj", shallowCopyObj);
+    console.log("shallowCopyObj1", shallowCopyObj1);
+    var shallowCopyDate1 = shallowCopy(shallowCopyDate);
+    console.log("shallowCopyDate", shallowCopyDate);
+    console.log("shallowCopyDate1", shallowCopyDate1);
+    var shallowCopyArr1 = shallowCopy(shallowCopyArr);
+    shallowCopyArr1[0] = 'newel0';
+    shallowCopyArr1[4][0] = 'newel30';
+    console.log("shallowCopyArr", shallowCopyArr);
+    console.log("shallowCopyArr1", shallowCopyArr1);
+    console.log("\n");
+
+    // ЗАДАЧА 16 (Глубокое копирование объектов/массивов)
+    function deepCopy(obj) {
+        // Обработка строк, чисел, булей, null или undefined
+        if ( obj == null || typeof obj != "object") {
+            return obj;
+        }
+        var newObj;
+        // Обработка объекта даты
+        if (Object.prototype.toString.call(obj) === '[object Date]') {
+            newObj = new Date();
+            newObj.setTime(obj.getTime());
+            return newObj;
+        }
+        // Обработка массивов
+        if (Object.prototype.toString.call(obj) === "[object Array]") {
+            newObj = [];
+            for (var i = 0, len = obj.length; i < len; i++) {
+                newObj[i] = deepCopy(obj[i]);
+            }
+            return newObj;
+        }
+        // Обработка остальных объектов
+        if (Object.prototype.toString.call(obj) === "[object Object]") {
+            newObj = {};
+            for (var attr in obj) {
+                if (obj.hasOwnProperty(attr)) {
+                    newObj[attr] = deepCopy(obj[attr]);
+                }
+            }
+            return newObj;
+        }
+
+        console.error("Не удалось скопировать объект! Его тип не поддерживается.", obj);
+    }
+
+    Object.defineProperties(Object, {
+        'extend': {
+            'configurable': true,
+            'enumerable': false,
+            'value': function extend(what, wit) {
+                var extObj, witKeys = Object.keys(wit);
+
+                extObj = Object.keys(what).length ? Object.clone(what) : {};
+
+                witKeys.forEach(function(key) {
+                    Object.defineProperty(extObj, key, Object.getOwnPropertyDescriptor(wit, key));
+                });
+
+                return extObj;
+            },
+            'writable': true
+        },
+        'clone': {
+            'configurable': true,
+            'enumerable': false,
+            'value': function clone(obj) {
+                return Object.extend({}, obj);
+            },
+            'writable': true
+        }
+    });
+    function clone(obj) {
+        var target = {};
+        for (var i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                target[i] = obj[i];
+            }
+        }
+        return target;
+    }
+
+    // mocks
+    var deepCopyObj = {
+        name: "Matvey",
+        age: "24",
+        cities: {
+            0: "Moscow",
+            1: "St.Petersburg",
+            2: "Novosibirsk"
+        },
+        date: new Date(2014, 1, 1, 12, 0, 0),
+        und: undefined,
+        ul: null,
+        arr: ["1", "2", [1, "sad"]]
+    };
+    var deepCopyDate = new Date();
+    var deepCopyArr = ["el0", "el1", "el2", new Date(), ["el30", "el31", new Date()], undefined, null, {name: "Gena"}];
+
+    // result
+    console.log("----- Задача 16 ----- \n\n");
+    var deepCopyObj1 = deepCopy(deepCopyObj);
+    deepCopyObj1.age = "25";
+    deepCopyObj1.cities[2] = "Omsk";
+    console.log("deepCopyObj", deepCopyObj);
+    console.log("deepCopyObj1", deepCopyObj1);
+    var deepCopyDate1 = deepCopy(deepCopyDate);
+    console.log("deepCopyDate", deepCopyDate);
+    console.log("deepCopyDate1", deepCopyDate1);
+    var deepCopyArr1 = deepCopy(deepCopyArr);
+    deepCopyArr1[0] = 'newel0';
+    deepCopyArr1[4][0] = 'newel30';
+    deepCopyArr1[7].name = 'newName';
+    console.log("deepCopyArr", deepCopyArr);
+    console.log("deepCopyArr1", deepCopyArr1);
     console.log("\n");
 });
