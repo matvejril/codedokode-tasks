@@ -374,19 +374,19 @@ window.addEventListener('load', function() {
     var hamburger1 = new Hamburger(orderHamburger.SIZE_SMALL, orderHamburger.STUFFING_CHEESE);
 
     // result
-    // console.log("----- Задача 12 ----- \n\n");
-    // console.log("Размер", hamburger1.getSize());
-    // console.log("Начинка", hamburger1.getStuffing());
-    // console.log("calculatePrice", hamburger1.calculatePrice());
-    // console.log("calculateCalories", hamburger1.calculateCalories());
-    //
-    // console.log(hamburger1.getToppings());
-    // hamburger1.addTopping(orderHamburger.TOPPING_MAYO);
-    // console.log(hamburger1.getToppings());
-    // hamburger1.addTopping(orderHamburger.TOPPING_SPICE);
-    // console.log("getToppings", hamburger1.getToppings());
-    // console.log("removeTopping", hamburger1.removeTopping(orderHamburger.TOPPING_MAYO));
-    // console.log("getToppings", hamburger1.getToppings());
+    console.log("----- Задача 12 ----- \n\n");
+    console.log("Размер", hamburger1.getSize());
+    console.log("Начинка", hamburger1.getStuffing());
+    console.log("calculatePrice", hamburger1.calculatePrice());
+    console.log("calculateCalories", hamburger1.calculateCalories());
+
+    console.log(hamburger1.getToppings());
+    hamburger1.addTopping(orderHamburger.TOPPING_MAYO);
+    console.log(hamburger1.getToppings());
+    hamburger1.addTopping(orderHamburger.TOPPING_SPICE);
+    console.log("getToppings", hamburger1.getToppings());
+    console.log("removeTopping", hamburger1.removeTopping(orderHamburger.TOPPING_MAYO));
+    console.log("getToppings", hamburger1.getToppings());
     console.log("\n");
 
     // ЗАДАЧА 13
@@ -414,18 +414,18 @@ window.addEventListener('load', function() {
             consumptionN: 0
         }, {
             type: "house",
-            count: 1,
+            count: 30,
             produceD: 0,
             produceN: 0,
-            consumptionD: 200*4/1000,
+            consumptionD: 200*40/1000,
             consumptionN: 200/1000,
             apartments: 200
         }, {
             type: "house",
-            count: 1,
+            count: 20,
             produceD: 0,
             produceN: 0,
-            consumptionD: 120*4/1000,
+            consumptionD: 120*40/1000,
             consumptionN: 120/1000,
             apartments: 120
         },
@@ -447,7 +447,7 @@ window.addEventListener('load', function() {
         },
         {
             type: "solarPanels",
-            count: 5,
+            count: 3,
             produceD: 4,
             produceN: 0,
             consumptionD: 0,
@@ -476,49 +476,46 @@ window.addEventListener('load', function() {
             var objElem = this.connectedObj[i];
             innerBalance += +(objElem.count * (objElem.produceD + objElem.produceN  - (objElem.consumptionD + objElem.consumptionN)))
         }
-        return innerBalance;
+        return Math.round(innerBalance);
+    };
+    ElectricGrid.prototype.getTotalPowerLines = function() {
+        var totalPowerLines = 0;
+        for (var j = 0; j < this.powerLines.length; j++) {
+            totalPowerLines += this.powerLines[j].count * this.powerLines[j].power;
+        }
+        return Math.round(totalPowerLines);
     };
     ElectricGrid.prototype.getCashFlow = function() {
         var innerBalance = 0;
         var cashFlow = 0;
-        var lineCapacity = 0;
+        var totalPowerLines = 0;
 
-        // Получить внетренний балан энергии
+        // Получить внутренний баланс энергии
         for (var i = 0; i < this.connectedObj.length; i++) {
             var objElem = this.connectedObj[i];
             innerBalance += +(objElem.count * (objElem.produceD + objElem.produceN  - (objElem.consumptionD + objElem.consumptionN)))
         }
 
-        // Сортировать линии по цене
-        var powerLinesArr = this.powerLines.slice();
-        powerLinesArr.sort(function (lineA, lineB) {
-            if (lineA.price < lineB.price) {
-                return 1;
-            } else if (lineA.price > lineB.price) {
-                return -1;
-            }
-        });
-
-        // Найти денежный поток + -
-        for (var e = 0; e < powerLinesArr.length; e++) {
-            var powerLine = powerLinesArr[e];
-            lineCapacity += powerLine.count * powerLine.power;
-            cashFlow += innerBalance * powerLine.price;
-            if (lineCapacity >= Math.abs(innerBalance)) {
-                break
-            }
+        // Получить максимальную мощность силовых линий города
+        for (var j = 0; j < this.powerLines.length; j++) {
+            totalPowerLines += this.powerLines[j].count * this.powerLines[j].power;
         }
 
-        // if (innerBalance > 0) {
-        //     // for (var e = 0; e < powerLinesArr.length; e++) {
-        //     //
-        //     // }
-        // } else {
-        //
-        // }
-
-        return cashFlow;
-
+        // Найти денежный поток
+        var powerLine;
+        if (totalPowerLines > Math.abs(innerBalance)) {
+            for (var e = 0; e < this.powerLines.length; e++) {
+                powerLine = this.powerLines[e];
+                cashFlow += ((powerLine.count * powerLine.power)/totalPowerLines)*powerLine.price*innerBalance
+            }
+        } else {
+            for (var k = 0; k < this.powerLines.length; k++) {
+                powerLine = this.powerLines[k];
+                cashFlow -= (powerLine.count * powerLine.power)*powerLine.price
+            }
+            console.log("Энергии линий не достаточно для снабжения города, город обесточен");
+        }
+        return Math.round(cashFlow);
     };
 
     var cityN = new ElectricGrid(connectedObj ,powerLines);
@@ -526,6 +523,7 @@ window.addEventListener('load', function() {
     // result
     console.log("----- Задача 13 ----- \n\n");
     console.log("Энергетический баланс города: ", cityN.getInnerBalance(), "МВт");
+    console.log("Максимальная мощность линий", cityN.getTotalPowerLines(), "МВт");
     console.log("Денежный поток: ", cityN.getCashFlow(), "у.е");
     console.log("\n");
 
